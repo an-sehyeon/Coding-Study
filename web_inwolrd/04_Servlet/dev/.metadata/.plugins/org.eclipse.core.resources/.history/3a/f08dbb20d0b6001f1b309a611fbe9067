@@ -1,8 +1,0 @@
-package com.korea.servlet;
-
-import jakarta.servlet.annotation.WebServlet;
-
-@WebServlet("/MyServlet")
-public class MyServlet extends HttpServlet{
-	
-}

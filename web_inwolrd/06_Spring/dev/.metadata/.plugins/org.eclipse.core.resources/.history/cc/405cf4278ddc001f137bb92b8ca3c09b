@@ -1,5 +1,0 @@
-package com.sehyeon.sportspsychology.mapper;
-
-public interface LogService {
-
-}

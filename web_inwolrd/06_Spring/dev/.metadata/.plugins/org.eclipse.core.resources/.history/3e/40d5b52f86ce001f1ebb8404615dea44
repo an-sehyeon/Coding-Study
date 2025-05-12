@@ -1,6 +1,0 @@
-package com.koreait.board.controller;
-
-@Controller
-public class BoardController {
-
-}
