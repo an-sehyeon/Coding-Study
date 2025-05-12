@@ -1,7 +1,0 @@
-package com.korea.servlet;
-
-@webServlet("/MyServlet")
-public class MyServlet {
-
-	
-}

@@ -1,6 +1,0 @@
-package com.koreait.board.bean;
-
-@Component
-public class AttachFileVO {
-
-}
