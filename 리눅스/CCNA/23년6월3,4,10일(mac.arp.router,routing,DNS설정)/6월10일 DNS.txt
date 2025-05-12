@@ -1,0 +1,53 @@
+NETWORK = 정보교환을 위해 통신장치를 연결한 통신망, 공유를 위한 연결 (데이터,정보,서비스)
+
+
+
+
+	요청
+Server	<-	Client
+	->
+IP	제공	IP
+Service
+
+--------------------------------------------------------
+
+DNS(Domain Name Service)
+       영역    이름	 제공
+
+HTTP (Hyper Text Transfer Protocol)	
+
+-----------------------------------------------
+
+DNS 설정 
+DNS 서버클릭 - Service - DNS -
+
+DNS server : on
+Name : 도메인 주소입력
+Address : 도메인 ip 입력 - add클릭
+ 
+PC 클릭 - Desktop에서  ipconfig -DNS Server에 DNS서버 ip 주소 입력
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,88 @@
+Router  = 사용자모드
+Router > enable = 특별권한모드전환
+Router# configure terminal = 구성모드전환
+Router(config)#
+Router(config)# interface ?/? = interface 설정모드전환
+
+Router(config-if)# ip address[Gateway IP Address] [Subnet Mask Address]
+= IP/subnetnmask할당
+Router(config-if)# no shutdonwn = 포트활성화
+
+
+문제 라우터 명령어 순서
+enable
+config ter
+inter f?/?
+ip add 192.168.10.1 255.255.255.0
+no shutdown
+exit
+end
+
+
+
+
+
+
+enable
+-관리자(특권모드전환)
+
+disable
+-일반사용자 모드 전환
+
+config ter
+-전역설정
+
+inter f0/0
+-Interface모드
+ip add 192.168.10.254 255.255.255.0
+
+no sh
+
+exit
+-하위모드로 이동
+
+end
+-관리자모드(특권모드)로 이동
+
+[확인]
+show ip route
+-라우팅 테이블 확인
+
+show interface
+-모든 인터페이스 확인
+
+show ip protocols
+-라우팅 프로토콜 관련 정보 확인
+
+show running-config
+-라우터와 스위치에서 현재 실행 중인 설정을 보여주는 명령어
+
+show ip in brief
+-ip정상적으로 입력된지 확인
+
+show host
+-host의 정보를 확인
+
+show user
+-접속한 사용자 정보 확인
+
+show version
+-라우터의 소프트웨어 버전과 IOS버전 확인
+
+copy running-config startup-config
+-현재 실행 중인 구성을 저장 구성으로 복사하여 
+장비가 재부팅되어도 구성이 유지되도록 함
+
+관리자모드가 아닌 상태에서 관리자모드를 사용하려면 앞에 do를 붙이면됨
+
+
+
+
+
+
+
+잘못눌렀을때
+쉬프트+컨트롤+6
+
+
+-컨트롤+쉬프트 6 

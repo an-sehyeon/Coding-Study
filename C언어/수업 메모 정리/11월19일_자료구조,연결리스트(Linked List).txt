@@ -1,0 +1,306 @@
+
+ [ 자료구조 ]
+
+ - 자료구조란 ?
+ - 데이터를 효율적으로 저장하고 조작(검색)하기 위한 구조를 의미
+ 
+ - 자료구조 예시 )
+ - 배열(Array), 구조체(Struct), 연결 리스트(Linked List), 스택(Stack), 큐(Queue), 트리(Tree),
+  해시 테이블(Hash Table) 등이 있음.
+
+ - ## '->' 연산자 ##
+ - '->'는 구조체 포인터의 멤버에 접근하는 연산자
+ - 간편한 방식으로, 구조체 포인터를 사용하여 구조체의 멤버에 접근할 때 사용
+
+ - '->' 연산자를 사용하는 이유 
+ 메모리효율성 : 구조체 멤버에 직접 접근할 때보다 포인터를 사용하는 것이 메모리를 더 효율적으로 사용할 수 있다. 
+		특히, 구조체가 큰 경우에는 포인터를 사용하여 메모리 복사를 피할 수 있다.
+
+ 포인터로의 동적 할당 및 반환: 구조체 포인터를 사용하면 동적으로 메모리를 할당하고 반환하는 작업이 용이해짐. 
+		malloc 또는 calloc 함수를 사용하여 메모리를 동적으로 할당하고, 
+		free 함수를 사용하여 메모리를 해제할 때 주로 포인터를 활용
+
+
+ - 사용예시 01 )
+  
+ #define MAX_SIZE 100
+ typedef struct {
+	int arr[MAX_SIZE];
+	int top;
+ }; Stack;				// Stack이라는 별칭을 가진 구조체
+
+ Stack myStack;			// Stack구조체의 멤버를 담은 myStack 변수 생성
+ Satck* stackPointer = &myStack;	// 구조체 포인터 함수인 stackPointer 변수
+
+ - myStac.top에 접근하는 방법 1
+ int value1 = myStack.top;
+
+ - myStac.top에 접근하는 방법 2
+ int value2 = stackPointer -> top;
+
+ - stackPointer -> top과 (*stackPointer).top은 동일하게 작동.
+
+
+
+ - 사용예시 02 )
+
+ struct Point {
+	 int x;
+	 int y;
+ };
+
+ struck Point myPoint;
+ struck Point* pointer ToMyPoint = &myPoint;
+
+ // 구조체 변수에 접근
+ myPoint.x = 10;
+ myPoint.y = 10;
+
+ // 구조체 포인터를 사용하여 멤버에 접근
+ pointerToMyPoint-> x = 30;
+ pointerToMyPoint-> y = 40;
+
+
+
+======================================================================
+
+
+
+ [ 연결 리스트(Linked List) ]
+
+ - C언어에서 매우 중요한 자료구조 중 하나
+
+ - 연결 리스트는 메모리에서 연속적으로 할당되지 않은 노드들이 포인터로 연결된 구조를 갖고 있음.
+	즉 노드들이 연결된 구성
+ 
+ - 각 노드는 데이터(Data)와 다음 노드를 가리키는 포인터(Point)로 이루어져 있음.
+
+ - 연결 리스트는 동적으로 메모리를 할당하므로, 
+	크기를 동적으로 조절할 수 있음 == 동적 메모리 할당을 사용함.
+
+ Data
+ Address ----> Data
+  ↑ 	     Address ----> Data
+  ↑		         Address -----> Data
+  ↑			              Address -----> NULL
+ Head			 Tail
+
+
+
+======================================================================
+
+ [ ## 노드의 구조체 ## ]
+
+ struct node {
+	int data;				// 노드의 데이터
+	struct node* next;		// 다음 노드를 가리키는 포인터
+ };
+
+
+======================================================================
+
+ [ 1. 노드 추가(Insertion) ]
+
+ - 리스트의 처음이나 중간에 새로운 노드를 추가할 수 있음.
+
+ - 리스트의 시작 부분에 노드 추가
+
+
+	 void insertAtBeginning(struct Node** head, int newData) {
+ - 첫 번째 매개변수인 struct Node** head는 리스트의 헤드 포인터를 나타냄.
+ - 두 번째 매개변수인 int newData는 새로운 노드에 저장될 데이터임.
+
+
+	 struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+ - 새로운 노드를 동적으로 할당
+
+
+	 newNode->data = newData;
+ - newNode의 data에는 입력된 newData를 저장
+
+
+	 newNode->next = *head;
+ - next에는 현재 리스트의 헤드를 가리키는 포인터를 설정
+ - 현재 head가 가리키는 노드를 말함.
+
+
+	 *head = newNode;
+ - 리스트의 헤드 포인터를 새로 추가도니 노드로 업데이트
+ - head는 헤드 포인터의 주소값, *head는 헤드 포인터가 가리키는 값
+ - 즉 head가 가리키는 값이 newNode의 주소로 변경
+ - 이는 결과적으로 head가 새로 추가된 노드를 가리킴
+ - 그러므로 새로운 노드를 리스트의 맨 앞에 추가할 수 있음.
+  
+ }
+	
+
+======================================================================
+
+ [ 특정 노드 뒤에 새로운 노드 추가 ]
+
+ 	void insertAfter(struct Node* prevNode, int newData) {
+ - 첫 번째 매개변수인 struct Node* prevnode는 새로운 노드가 추가될 위치 이전의 노드를 가리킴.
+ - 두 번째 매개변수인 int newData는 새로운 노드에 저장될 데이터임.
+
+
+	 if (prevNode == NULL) {		// 이전 노드 prevNode가 유효한지 (NULL이 아닌지) 확인
+		 printf("Previous Node cannot be NULL.");
+		 return;
+	 }	
+
+
+	struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+ -새로운 노드를 동적으로 할당
+
+
+	newNode->data = newData;
+ -새로운 노드의 data에는 입력된 newData를 저장
+
+
+	newNode->next = prevNode->next;
+ -새로운 노드의 next에는 이전 노드가 가리키던 다음 노드를 가리키도록 설정
+
+
+	prevNode->next = newNode;
+ - 이전 노드 prevNode의 next를 새로 추가된 노드로 업데이트
+ - 이로써, 새로운 노드가 연결 리스트에 삽입됨.	  
+
+ }
+
+ - 사용예시 )
+	struct Node* A = NULL;		// 빈 리스트 생성
+
+	insertAtBeginning(&head, 10);	// 리스트의 시작 부분에 10 추가
+	insertAtBeginning(&head, 20);	// 리스트의 시작 부분에 20 추가
+
+ -현재 리스트 상태 : 20 -> 10->NULL
+
+	struct Node* nodeToInsertAfter = head->next;		// 두번째 노드를 선택
+	insertAfter(nodeToInsertAfter, 30);			// 선택한 노드 뒤에 30추가
+
+ - 현재 리스트 상태 : 20 -> 10 -> 30 -> NULL
+
+
+	+--+     +---+    +---+
+	| 1 | -> | 2 | -> | 3 |
+	+--+     +---+    +---+
+	  ^         ^
+	   |         |
+	 head   head	->	next
+
+======================================================================
+
+ [ 노드 삭제(Deletion) ]
+
+  리스트에서 특정 노드를 삭제할 수 있음. 
+
+ ( 리스트의 시작 부분의 노드 삭제 )
+ void deleteAtBeginning(struct Node** head) {	// 매개변수는 리스트의 헤드 포인터를 나타냄
+
+
+ if(*head == NULL) {
+	printf("List is already emtpy.");
+	return;
+ }
+
+
+ struct Node* temp = *head;
+ - temp라는 임시 포인터를 사용하여 헤드가 가리키는 노드를 가리키도록 함.
+
+
+ *head = (*head) -> next;
+ - 헤드를 다음 노드로 이동, 이로써 헤드가 현재 첫 번째 노드를 가리킴
+ free(temp);
+ }
+
+
+
+ ( 특정 노드 뒤의 노드 삭제 )
+ void deleteAfter(sturct Node* prevNode) {
+ - 매개변수는 삭제하려는 노드의 이전 노드를 나타냄.
+
+
+ if(prevNode == NULL || prevNode -> next == NULL) {
+	printf("Cannot delete. Previous node is NULL or the node to delete is NULL.");
+	return;
+ }
+
+
+ struct Node* temp = prevNode -> next;
+ - temp라는 임시 포인터를 사용하여 삭제하려는 노드를 가리키도록 함.
+
+
+ prevNode -> next = temp -> next;
+ - prevNode의 next를 temp -> next로 설정항 이전 노드가 삭제되는 노드를 건너뛰게 함.
+ free(temp);
+ }
+
+
+
+ struct Node head = NULL;
+
+ insertAtBeginning(&head, 10);	// 10 -> NULL
+ insertAtBeginning(&head, 20);	// 20 -> 10 -> NULL
+ - 현재 리스트 상태 : 20 -> 10 -> NULL
+
+ deleteAtBeginning(&head);
+ - 현재 리스트 상태 : 10 -> NULL
+
+ struct Node* nodeToDeleteAfter = head; 	// 첫 번째 노드를 선택
+ deleteAfter(nodeToDeleteAfter);
+ - 현재 리스트 상태 : 10 -> NULL
+
+
+======================================================================
+
+ [ 전체 리스트 출력 ]
+
+ void printList(struct Node* head) {		// 연결리스트의 헤드 노드를 매개변수로 받음
+	struct Node* current = head;		// 포인터 current를 선언 후 리스트의 헤드 노드로 초기화 
+	while (current != NULL) {		// 현재 노드가 NUUL이 아닐때까지 반복
+		printf("%d -> ", current -> data);	// 현재 노드의 데이터 출력
+		current = current -> next;		// current가 다음 노드를 가리키는 next주소를 
+	}					// 지님과 동시에 다음 노드로 이동
+	printf("NULL\n");		// 노드가 NULL이 되어서 while문이 종료가 되면 NULL출력
+ }
+
+======================================================================
+
+ [ 메모리 해제 ]
+
+ - 리스트를 사용한 후에 메모리 해제해야 함.
+
+ void freeList(struct Node** head) {		// 헤드 노드를 가리키는 이중포인터 매개변수
+	struct Node* current = *head;		// current포인터 변수를 헤드 노드로 초기화
+	struct Node* next;			// 다음 노드를 가리키기위한 포인터 변수
+	while (current != NULL) {		// 헤드 노드가 NULL이 아닐때까지 반복
+		next = current -> next;	// 현재 노드의 다음 노드를 next에 저장
+		free(current);		// 현재 노드 메모리 해제
+		current = next;		// next에 저장된 값을 current에 대입하여 다음 노드로 이동
+	}
+	*head = NULL;	// 리스트를 비웠으므로 헤드를 NULL로 설정
+ }
+
+======================================================================
+
+ [ 스택 ]
+
+
+======================================================================
+
+ [  ]
+
+
+======================================================================
+
+ [  ]
+
+
+
+
+
+
+
+
+
+

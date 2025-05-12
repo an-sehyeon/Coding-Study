@@ -1,0 +1,283 @@
+use practice;
+
+create table student(
+	id int,
+	name varchar(20),
+	grade int,
+	gpa double
+);
+
+insert into student(id,name,grade,gpa)
+values(2009038018,'박호범',4,3.6);
+
+insert into student(id,name,grade,gpa)
+values(2009038019,'안은진',1,1.6);
+
+insert into student(id,name,grade,gpa)
+values(2009038077,'이민호',4,2.6);
+
+insert into student(id,name,grade,gpa)
+values(2009038777,'정채연',2,4.7);
+
+
+-student 테이블 생성
+-칼럼은 학번, 이름, 학년, 평점
+
+--------------------------------------------------------------
+
+(테이블 내 칼럼 추가)
+alter table student add english int
+default 0;
+-student테이블에 egnlish 칼럼을 추가하겠다.
+ 정수 기본값은 0인..
+
+
+update student set english = 75
+where name ='정채연';
+
+update student set english = 88
+where name ='이민호';
+
+update student set english = 68
+where name= '안은진';
+
+---------------------------------------------------------------
+(칼럼 이름 변경)
+alter table student change english TOEIC int;
+
+-student테이블의 engilsh칼럼을 TOEIC으로 변경, 타입은정수
+-alter ~ change로 칼럼 이름 변경
+
+---------------------------------------------------------------
+(테이블명 변경)
+alter ~rename
+alter table student rename univ_student;
+-student테이블을 univ_student로 이름 변경
+
+---------------------------------------------------------------
+(조건문)
+select * from univ_student where
+gpa >= 4.0 and TOEIC >= 800;
+
+A and B
+A와 B 둘다 만족하는 경우
+gpa 4.0이상 그리고 토익 800점 이상
+둘다 만족하는 경우
+Empty set = 빈 집합 = 없다.
+
+select * from univ_student where
+gap >= 4.0 or TIEIC >= 800;
+
+A and B
+A또는 B 중에 하나만 만족하는 경우
+gpa 4.0이상 또는 토익 800점 이상
+둘 중 하나만 만족해도 됨
+
+
+---------------------------------------------------------------
+(조건 조회)
+BETWEEN
+BETWEEN A AND B : A 와 B사이
+select * from univ_student where TOEIC BETWEEN 700 and 800;
+-토익 점수 700~800점 데이터 조회
+
+
+---------------------------------------------------------------
+(정렬)
+select * from student order by gpa desc;
+(order by : ~에 의한 순서)
+-gpa 순서로 정렬해라 desc(내림차순)
+-gpa 내림차순 순서로 정렬해라
+-desc - descending (하강하는, 내림차순의)
+
+select * from student order by gpa asc;
+-asc - ascending (상상하는 ,오름차순의)
+----------------------------------------------------------------
+(날짜 데이터 함수 = date)
+create table reservation1(
+	name varchar(10),
+	reserv_name varchar(20),
+	reserv_date date
+);
+
+
+show columns in reservation1;
+
+insert into reservation1
+values('김민수','콘서트1',NOW());
+
+insert into reservation1
+values('이민호','콘서트2','2020-09-18');
+
+insert into reservation1
+values('정채연','콘서트3','2020-09-17');
+
+insert into reservation1
+values('최성국','콘서트4',			
+DATE_ADD(NOW(), interval 2 day));		
+
+insert into reservation1
+values('최성국','콘서트5',
+DATE_ADD(NOW(), interval 4 day));		
+
+NOW() 함수로 현재 날짜 가져온다
+DATE_ADD로 날짜에 얼만큼 더하고 빼고...
+
+ex) DATE_ADD(NOW(), interval 2 day)
+-현재날짜의 2일뒤 날짜를 반환한다.
+
+ex)DATE_ADD(NOW(), interval -2 day)
+-현재날짜의 2일전 날짜를 반환한다.
+ ------------------------------------------------------
+
+(BETWEEN으로 날짜 범위 걸기)
+select * from reservation1 where
+reserv_date between
+'2020-09-15' AND '2020-09-18';
+ 
+-예약날짜 2020-09-15 부터 2020-09-18사이 데이터 조회
+
+between 700 and 800
+between '2020-09-15' AND '2020-09-18'
+-------------------------------------------------------
+(시간 데이터 함수 = time)
+create table reservation2(
+	name varchar(10),
+	reserv_name varchar(20),
+	reserv_time time
+);
+
+insert into reservation2
+values('김민수', '콘서트1', now());
+
+insert into reservation2
+values('이민호', '콘서트2', '09:30:20');
+
+insert into reservation2
+values('김민수', '콘서트3', DATE_ADD(NOW(), interval 1 hour) );
+
+insert into reservation2
+values('김민수', '콘서트3', DATE_ADD(NOW(), interval -1 hour) );
+
+select * from reservation2;
+-------------------------------------------------------
+(날짜와 시간 데이터 함수 = datetime)
+create table reservation3(
+	name varchar(10),
+	reserv_name varchar(20),
+	reserv_time datetime
+);
+
+insert into reservation3
+values('김민수', '콘서트1', now());
+
+insert into reservation3
+values('이민호', '콘서트2', '2020-09-18 09:30:20');
+
+insert into reservation3
+values('김민수', '콘서트3', DATE_ADD(NOW(), interval 2 day) );
+
+select * from reservation3;
+-------------------------------------------------------
+
+===1주차 9번 연습문제 풀기===
+
+(데이터베이스 생성)
+create database book_db;	
+	
+(book_db데이터베이스 사용)
+use book_db;			
+
+(book 테이블 생성)
+create table book(			
+	book_title varchar(20),
+	author varchar(10),
+	genre varchar(10),
+	price int
+);
+
+(book테이블에 데이터값 삽입)
+insert into book
+values('인문학1','김철수','인문학',10000);
+
+insert into book
+values('인문학2','이민호','인문학',13000);
+
+insert into book
+values('과학1','최성균','과학',15000);
+
+insert into book
+values('과학2','박신정','과학',17000);
+
+insert into book
+values('철학1','정철민','철학',14000);
+
+insert into book
+values('철학2','강용준','철학',18000);
+
+insert into book
+values('심리학1','손만호','심리학',12000);
+
+insert into book
+values('심리학2','허태균','심리학',13000);
+
+insert into book
+values('자기계발1','최대용','자기계발',14000);
+
+insert into book
+values('자기계발2','박성호','자기계발',16000);
+
+
+1. select * from book;
+
+2. select book_title,price from book;
+
+3. select * from book where
+     genre = '인문학' or genre = '과학';
+
+4. select * from book where
+    genre = '철학' or genre = '심리학';
+
+5. select  * from book where author = '허태균';
+
+6. select * from book where price between 10000 and 15000;
+
+7. select * from book where
+genre = '인문학' and price >= 10000 and price <=15000;
+
+8. select * from book where
+genre = '인문학' or price >= 10000 and price <=15000;
+
+9. select * from book where
+genre = '철학' and price >= 10000 and price <=15000;
+
+10.  select * from book where
+genre = '철학' or price >= 10000 and price <=15000;
+
+11. select * from book order by book_title asc;
+
+12. select * from book order by book_title desc;
+
+13. delete from book where author = '허태균';
+
+14. update book set price = 11000
+where author = '손만호';
+
+15. update book set price = 17000
+where author = '박성호';
+
+
+-------------------------------------------------------
+
+
+
+
+-------------------------------------------------------
+
+
+
+
+
+
+
+

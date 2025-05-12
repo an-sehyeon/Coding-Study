@@ -1,0 +1,33 @@
+응용계층 종류	사용포트번호	tcp(연결제어,신뢰도), udp(연결제어X)
+7계층프로토콜/4계층프로토콜
+
+FTP / TCP	20(명령어...연결), 21(데이터교환)
+SSH / TCP	22
+TELNET / TCP	23
+DHCP / UDP	67,68
+DNS / UDP	53
+SMTP /  TCP	25
+HTTP / TCP	80
+SNMP / UDP	161,162...
+....
+
+
+HTTP (Hypertext Transfer Protocol): 웹 브라우저와 웹 서버 간의 통신에 사용되는 프로토콜로, 웹 페이지의 요청과 응답을 처리합니다.
+
+FTP (File Transfer Protocol): 파일 전송을 위해 사용되는 프로토콜로, 파일을 업로드하거나 다운로드하는 데 사용됩니다.
+
+SMTP (Simple Mail Transfer Protocol): 이메일을 보내는 데 사용되는 프로토콜로, 메일 서버 간의 메일 전송을 처리합니다.
+
+POP3 (Post Office Protocol version 3): 이메일 클라이언트가 메일 서버에서 이메일을 가져오는 데 사용되는 프로토콜입니다.
+
+IMAP (Internet Message Access Protocol): 이메일 클라이언트가 메일 서버에 있는 이메일을 관리하는 데 사용되는 프로토콜입니다.
+
+DNS (Domain Name System): 호스트 이름을 IP 주소로 변환하는 데 사용되는 프로토콜로, 인터넷에서 도메인 이름을 해석하는 데 필요합니다.
+
+SSH (Secure Shell): 원격 접속을 안전하게 제공하기 위해 사용되는 프로토콜로, 암호화된 터미널 세션을 제공합니다.
+
+SNMP (Simple Network Management Protocol): 네트워크 장비의 모니터링과 관리를 위해 사용되는 프로토콜입니다.
+
+DHCP (Dynamic Host Configuration Protocol): 네트워크에 연결된 장치들에게 IP 주소와 네트워크 설정 정보를 동적으로 할당하는 데 사용됩니다.
+
+Telnet: 원격 호스트에 접속하여 터미널 세션을 제공하는 데 사용되는 프로토콜입니다. 그러나 보안상의 이유로 SSH로 대체되는 것이 권장됩니다.

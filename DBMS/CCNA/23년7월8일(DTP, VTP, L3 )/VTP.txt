@@ -1,0 +1,14 @@
+VTP VLAN Trunk Protocol)
+
+명령어
+en
+config ter
+vtp mo (server/client/transparent) : 모드설정
+vtp domain koera(도메인명) 
+vtp ver 2
+vtp pa 1234
+
+확인 명령어
+do show vtp status
+show vlan brief
+show vtp password

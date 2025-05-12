@@ -1,0 +1,279 @@
+제약조건 - constraints
+-primary key - 기본기, 주요키
+-foreign key -  외래키
+-unique key - 유니크 키, 고유키
+-not null - 널값을 허용안함
+-chech - 체크제약조건, 값을 체크해서... 거를때
+-default - 기본값설정
+
+
+-----------------------------------------------------------------
+
+primary key
+-not null and puique
+-널값을 허용하지 않고 중복허용안함
+-데이터 중복 방지가 된다.
+-아이디, 주민번호, 학번등 이용
+-DB에 아예 중복데이터가 안들어감
+-----------------------------------------------------------------
+
+기본키(primary key)
+
+create database practice2;
+
+use practice2;
+
+create table univ_student(
+id int primary key,
+name varchar(20),
+major varchar(20),
+year int,
+enterdate DATE
+);
+
+
+show columns in univ_student;
+-uinv_student 테이블의 칼럼 조회하면 id에 기본키 설정
+
+insert into univ_student values(20173888, '송중기', '컴퓨터공학', 3, '2018-03-01');
+
+insert into univ_student values(2018038018, '이민호', '컴퓨터공학', 3, '2018-03-01');
+
+-id에는 기본키가 설정되어있어서 널값을 허용하지 않고 중복데이터도 허용하지 않는다.
+
+-오류 1062 (230000)
+-Duplicate Entry '2018038018' for key
+-'2018038018' 이 데이터가 중복이 된다.
+
+insert into univ_student values(2019036022, '이수현', '전자공학', 2, '2019-03-01');
+
+insert into univ_student values(2019034582, '신동엽', '화학공학', 2, '2019-03-01');
+
+insert into univ_student values(2020071322, '김무열', '화학공학', 2, '2020-03-01');
+
+insert into univ_student values(2020036022, '마동현', '고분자공학', 1, '2020-03-01');
+
+insert into univ_student values(null, '마동현', '고분자공학', 1, '2020-03-01');
+-에러 1048 : 칼럼 id는 널값이 될수없다.
+
+select * from univ_student;
+
+drop table univ_student;
+-테이블 자체가 삭제
+
+truncate table univ_student;
+-데이터만 모두 제거
+
+-----------------------------------------------------------------
+
+외래키(foreign key)
+-다른 테이블의 기본키를 참조하는 열(칼럼)
+-회원정보 테이블의 id칼럼에 기본키가 있다.
+-주문정보를 사용해야겠다.
+-memver테이블
+-id ,pw ,name ,address ,phone + order_time, order_date
+-id : primary key
+-'asdf123', 'adf1234', '김철수', '대구', '010', '김치', '2020' 
+-'asdf123', 'adf1234', '김철수', '대구', '010', '김치', '2020' 
+이게 안된다 아이디에 중복방지가 되서 데이터 여러개 못넣는다.
+
+회원 정보 , 주문정보
+회원정보 : id, pw, name, address, phone
+주문정보 : id, order_time, order_date
+회원정보  id는 기본키
+주문정보 id는 외래키
+외래키에는 중복데이터가 들어갈수 있고 기본키랑 연결시켜준다.
+
+-----------------------------------------------------------------
+
+학생정보, 캠프정보
+학생 학번은 중복이 들어가면 안되고 캠프정보에는 학번이 중복으로 들어가야 된다.
+한 학생이 여러개의 캠프에 참가할 수 있으니까
+
+create table univ_camp(
+camp_name varchar(20),
+camp_id int,
+foreign key(camp_id) references univ_student(id),
+name varchar(20),
+major varchar(20),
+year int
+);
+
+foreign key(camp_id) references univ_student(id)
+-외래키 camp_id는 univ_student테이블의 기본키 id 를 참조한다.
+
+show columns in univ_camp;
+
+외래키 comp_id는 MUL - multipe - 중복데이터 허용
+
+insert into univ_camp
+values('면접 스피치 캠프', 20173888, '송중기', '컴퓨터공학',3);
+
+insert into univ_camp
+vlaues('면접 스피치 캠프', 2023038033, '최강희', '컴퓨터공학',3);
+-이 데이터 못넣음
+
+외래키가 기본키를 참조한다.
+외래키에 넣을수 있는 데이터는 기본키에 존재하는 데이터만 넣을 수 있다.
+
+최강희 2023038033 이 데이터는 학생정보에 없는 학번이다.
+이게 만약 데이터 들어가게 된다면 문제가 되는게
+학생정보에 있지도 않은 학생이 캠프에 참가하게 된다.
+
+외래키를 설정하면 기본키에 있는 데이터만 넣고, 중복허용
+
+insert into univ_camp
+values('심리힐링 캠프', 2019036022, '이수현', '전자공학',2);
+
+insert into univ_camp
+values('전공역량 강화 캠프', 2019034582, '신동엽', '화학공학',2);
+
+select * from univ_camp;
+외래키 테이블의 데이터도 모두넣고 조회
+
+select * from univ_student;
+select * from univ_camp;
+
+univ_student = 기본키 테이블 = 부모 테이블
+univ_camp = 외래키 테이블 = 자식테이블
+외래키 테이블이 기본키 테이블을 참조한다.
+
+-----------------------------------------------------------------
+
+부모테이블 제약 : 외래키가 참조하는 데이터를 함부로 삭제, 수정할수없다.
+자식테이블 제약 : 기본키에 없는 데이터 못넣는다. 없는 데이터로 변경 불가능
+
+부모테이블 제약
+delete from univ_student where id = 2018038018;
+-기본키 테이블의 2018038018학번을 삭제하지 못한다
+
+univ_student테이블(기본키 테이블, 부모데이블)
+2018038010 송중기 데이터가 삭제(수정)가 되면 문제가 된다.
+그럼 univ_camp에서 학생정보에 있지도 않은 데이터를 사용하게되니까...
+
+요류 해석
+cannot delete or update a parent row
+=부모 row(행) 를 삭제하거나 수정할 수 없다.
+a foreign key constraint fails
+=외래키 제약 실패
+
+-----------------------------------------------------------------
+
+자식테이블 제약
+insert into univ_camp values('빅데이터 캠프', 2023038044, '최강희', '컴퓨터공학', 1);
+-부모테이블의 기본키에 존재하지 않는 데이터는 못넣는다.
+
+오류 해석
+cannot add or update a child row
+=자식 row(행) 추가하거나 수정할 수 없다
+a foreign key constrains fails
+=외래키 제약 실패
+
+update univ_camp set camp_id = 2023038044 where name ='송중기';
+-2023038044는 학생정보에 없는 학번이기 때문에 수정 불가능
+
+-----------------------------------------------------------------
+
+데이터 무결성을 확보하는게 제약조건
+무결성 : 정확성, 일관성, 유효성
+
+-----------------------------------------------------------------
+
+기본키 외래키 연습문제
+
+(기본키 테이블 = 회원정보)
+create table member(
+id varchar(30) primary key,
+pw varchar(30),
+name varchar(10),
+sex varchar(10),
+address varchar(100)
+);
+
+show coloumns in member;
+-primary key : not null and unique(널값 허용안하고 중복허용안함)
+
+insert into member values('shan334','asd1234','이민호','남자','대구광역시 동구 효목동');
+
+insert into member values('qwer334','asd1234','김철수','남자','대구광역시 동구 불로동');
+
+insert into member values('zxcv334','asd1234','정채연','여자','대구광역시 서구 내당동');
+
+(외래키 테이블 = 주문정보)
+create table order_info(
+order_id varchar(30),
+foreign key(order_id) references member(id),
+item_id varchar(20),
+item_name varchar(30),
+item_count int
+);
+
+insert into order_info values('shan334','asd1234','아이폰14pro',879);
+
+insert into order_info values('shan334','2qqwe1234','아이폰12pro',159);
+
+insert into order_info values('qwer334','asdfadfs78','갤럭시폴더3',483);
+
+insert into order_info values('zxcv334','rtrt1734','갤럭시울트라22',379);
+
+-------------------------------------------------------------------------------
+
+외래키 때문에 생긴 제약
+외래키를 설정해서, 부모테이블, 자식테이블에 어떤 제약이 걸렸나?
+
+부모 테이블
+-cannot delete or update a parent row
+-자신을 참조하는 외래키가 있다면 기본키는 함부로 삭제되거나 수정될수없다.
+
+
+자식 테이블
+-cannot add or update a child row
+
+ 회원정보
+create table lottecinemaMember(
+id varchar(15) primary key,
+pw varchar(15),
+name varchar(10),
+addreass varchar(40),
+phnum varchar(20),
+signdate date
+);
+
+show columns in lottecinemaMember;
+
+insert into lottecinemaMember values('shan334','a1234','안세현','대구광역시 동구 효목동','0101234',
+now());
+
+영화티켓정보
+create table lcticket(
+movietitle varchar(20),
+movietime datetime,
+reservedid varchar(15),
+foreign key(reservedid) references lottecinemaMember(id),
+name varchar(10)
+);
+
+show columns in lcticket;
+
+insert into lcticket values('드림',now(),'shan334','안세현');
+insert into lcticket values('드림',now(),'shan334','안세현');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

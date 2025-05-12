@@ -1,0 +1,154 @@
+NAT (Network Address Translation)	[주소 절약 기술]
+	IP     주소      변환기술
+
+(중복허용 -> 절약)
+사설대역
+A  10.x.x.x
+B  172.16-31.x.x
+C  192.168.x.x
+
+-사설대역 IP를 공인대역IP로 주소 변환해주는 기술
+-IPv4주소를 절약하는 기술
+
+사설대역) : 개인,LAN, IP중복허용가능
+
+공인대역) : ISP업체,WAN, IP중복허용불가능
+
+		사설IP		공인IP
+
+DNAT		N		M	: 공인IP의 개수만큼만 통신 	(내부 -> 외부O, 외부 -> 내부 X)		
+
+SNAT		1		1	: 공인IP에서  사설IP 접근가능	(내부 -> 외부O, 외부 -> 외부 O)		
+
+PAT		N		M	: 공인IP의 개수 상관없이 통신가능  (내부 -> 외부O, 외부 -> 내부 X)				
+
+	
+	NAT명령어 순서
+1 사설대역지정 - acl을 사용
+2 공인IP지정 ip nat
+3 사설ip - 공인ip Mapping
+4 Interface 사설/공인 영역 설정
+
+
+[DNAT]
+access-list 10 permit 192.168.10.0 0.0.0.255
+ip nat pool dnat 1.1.12.100 1.1.12.100 [시작과 끝 범위] netmask 255.255.255.0
+ip nat inside source list 10 pool dnat
+inter f0/0
+ip nat inside
+inter s0/0
+ip nat outside
+show ip nat translations
+
+
+access-list 10 permit 172.16.0.0 0.0.255.255
+ip nat pool dnat 1.1.23.100 1.1.23.100 netmask 255.255.0.0
+ip nat inside source list 10 pool dnat
+inter f0/0
+ip nat inside
+inter s0/0
+ip nat outside
+show ip nat translations
+
+
+
+[PAT]
+assess-list 20 permit 10.0.0.0 0.255.255.255
+ip nat pool pat 1.1.12.200 1.1.12.200 netmask 255.0.0.0
+ip nat inside source list 20 pool pat overload
+inter f0/1
+ip nat inside
+inter s0/0
+ip nat outside
+
+
+[SNAT]
+ip nat inside source static 192.168.10.100[사설ip] 1.1.12.111[변환할 공인ip]
+
+ip nat inside source static 192.168.10.200 1.1.12.222
+
+
+-----------------------------------------------------------------
+
+
+(문제)
+pat
+1.1.23.100~1.1.23.150
+
+host는 dhcp로 ip 자동분배
+FTP Server는 ip고정 할당
+dhcp 제외주소는 192.168.10.254, 192.168.100
+FTP Server SNAT설정
+
+[DHCP설정]
+inter f0/1
+ip add 192.168.10.254 255.255.255.0
+no sh
+ex
+ip dhcp pool localol [dhcp이름]
+net 192.168.10.0 255.255.255.0
+default-router 192.168.10.254
+dns-server 1.1.12.111 [dns서버주소]
+ex
+ip dhcp excluded-address 192.168.10.254 [dhcp제한할 ip 주소 ]
+
+[PAT설정]
+access-list 20 permit 192.168.10.0 0.0.0.255
+ip nat pool pat 1.1.23.100 1.1.23.150 netmask 255.255.255.0
+ip nat inside source list 20 pool pat overload
+inter f0/1
+ip nat inside
+inter s0/0
+ip nat outside
+
+[FTP Server SNAT설정]
+ip nat inside source static 192.168.10.100 1.1.23.123 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

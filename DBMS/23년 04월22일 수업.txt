@@ -1,0 +1,163 @@
+show databases;
+-데이터베이스 목록조회
+
+create database practice;
+-practice 데이터베이스 생성
+
+show databases;
+-다시 목록조회 하면 내가 만든 데이터베이스가 보인다.
+
+show tables in practice;
+-practice 데이터베이스 안에 있는 테이블들 조회
+
+show columns in person;
+-person테이블 내부의 칼럼들 조회
+
+
+use practice;
+-practice 데이터베이스 사용하겠다.
+-데이터베이스 사용후에 안에 테이블 만들고 
+ 데이터 넣고 등등
+
+varchar         vs    char
+가변문자열    vs     고정문자열
+
+
+-----------------------------------------------------------
+create table person(
+	name varchar(10),
+	age int,
+	height double
+);
+-person 테이블 생성
+-칼럼 name, age, height
+-타입은 가변문자열, 정수 , 실수
+
+insert into person(name,age,height)
+values('이민호', 20,176.6);
+
+insert into person(name,age,height)
+values('정채연', 21,165.6);
+
+insert into person(name,age,height)
+values('송중기', 22,17.8);
+
+(조건조회)
+select * from person;
+-person테이블의 데이터 모두 조회
+
+select name from person;
+-person테이블의 모든 name만 조회
+
+select * from person where name='이민호';
+select * from person where age >=21;
+select * from person where height >= 170;
+
+------------------------------------------------------
+{문제1
+차량 테이블
+-모델명 = 가변 문자열
+-가격 = 정수
+-연비 = 실수
+-테이블 만들고, 데이터 넣고, 데이터 조회
+
+ create table car(
+     name varchar(10),
+     price int,
+     fuel double
+    );
+
+insert into car(name,price,fuel)
+values('소나타',2500,2200.8);
+
+insert into car(name,price,fuel)
+values('그랜져',3500,2800.8);
+
+insert into car(name,price,fuel)
+values('제네시스',7000,3300.77);
+
+select * from car;	}
+
+----------------------------------------------------------
+
+수정
+update person set age=30 
+where name='이민호';
+
+ex) 정채연 나이를 32살로 키를 158.8로 변경하겠다.
+update person set age=32,height=158.8
+where name='정채연';
+
+삭제
+delete from person where name='이민호';	//이민호삭제
+
+
+테이블삭제
+drop table person;
+-person테이블 삭제
+
+select * from person;	//조회
+
+---------------------------------------------------------
+
+문제2
+영화 테이블 생성
+-제목 = varchar(10)
+-평점 = double
+-관객수 = int
+
+슈퍼마리오 브라더스, 8.3, 20000
+존위4, 7.8, 40000
+드림, 9.0, 30000
+
+데이터 3개 넣고 모두조회, 조건조회, 수정, 삭제
+
+use practice;
+
+create table movie(
+	title varchar(10),
+	rating double,
+	attendance int
+);
+
+insert into movie(title,rating,attendance)
+values('슈퍼마리오 브라더스', 8.3, 2000);
+
+insert into movie(title,rating,attendance)
+values('존윅4', 7.8, 4000);
+
+insert into movie(title,rating,attendance)
+values('드림', 9.0, 3000);
+
+
+-----------------------------------------------------------
+
+문제3
+책 테이블 생성
+-책 제목 = varchar(20)
+-책 저자 = varchar(20)
+-책 가격 = int
+
+use practice;
+create table book(
+	title varchar(20),
+	name varchar(20),
+	price int
+);
+
+insert into book(title,name,price)
+values('세이노의 가르침','세이노 데이원',6480);
+
+insert into book(title,name,price)
+values('도덕경','노자',2900);
+
+
+insert into book(title,name,price)
+values('이탈리아 기행','오한 볼프강',2900);
+
+(수정)
+update book set title ='맥베스',name ='윌리엄 셰익스피어', price = 7898
+where title='세이노의 가르침';
+
+
+

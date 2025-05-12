@@ -1,0 +1,100 @@
+STP(Spanning-Tree Protocol)
+-스위치 루핑 방지 프로토콜
+-루핑방지를 목적으로 폐쇄회로의 개수의 맞게 특정보트를 BLK 시키는 기술
+
+NO.1
+
+[sw0]
+en
+show spanning-tree
+
+[sw2]
+en 
+show spanning-tree
+
+[sw1]
+en
+show spanning-tree
+
+[sw2]
+config ter
+spanning-tree vlan 1 priority 40960
+
+[sw1]
+config ter
+spanning-tree valn 1 priority 0
+
+[sw0]
+config ter
+spanning-tree vlan 1 priority 40960
+
+[sw1을 막으려면]
+(sw2)
+spanning-tree vlan 1 priority 0
+spanning-tree vlan 1 priority 32769
+
+
+
+
+NO.2
+
+[sw3]
+en
+config ter
+spanning-tree vlan 1 priority 40960
+
+[sw6]
+en 
+config ter
+spanning-tree vlan 1 root primary
+
+[sw4]
+en
+config ter
+spanning-tree vlan 1 priority 61440
+
+
+
+NO.3
+[sw7(4)]
+en
+config ter
+spanning-tree vlan 1 priority 0
+
+
+
+NO.4
+
+
+
+
+-------------------------------------------------------
+
+show spanning-tree
+
+disabled(문제상황발생, shutdown)
+=BPDU 송신x, 수신x, Mac학습x, 데이터전송x
+
+blocking(STP,Alternate Down)
+=BPDU 송신x 수신o, Mac 학습x, 데이터전송x
+
+listening(DP,RP 초기상태)
+=BPDU 송신o, 수신o, Mac학습x, 데이터전송x
+
+learning
+=BPDU 송신o, 수신o, Mac학습 중, 데이터전송x
+
+forwarding
+=BPDU 송신o, 수신o, Mac학습 o, 데이터전송o
+
+RSTP 순서
+discarding [disabled - blocking - listening]
+learning
+forwarding
+
+Forward Delay = listening에서 learning까지 넘어오는 시간
+
+Max Age =
+
+
+

@@ -1,0 +1,7 @@
+ARP(Adress Resolution Protocol) 주소해석프로토콜
+
+3계층(network)에 위치한 프로토콜 , mac주소와 ip주소를 연결하는 용도
+ip주소를 기반으로 mac주소를 알아오는 역할
+
+LAN구간통신
+IP -> MAC -> 통신

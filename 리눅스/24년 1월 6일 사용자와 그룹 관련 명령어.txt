@@ -1,0 +1,58 @@
+
+ [passwd]
+사용자의 비밀번호를 변경하는 명령어
+- Passwd cookuser1 => cookuser1 사용자의 비밀번호 설정 또는 변경
+
+ [usermod]
+사용자의 속성을 변경하는 명령어
+- usermod –shell /bin/csh cookuser1  => cookuser1 사용자의 기본 셸을 /bin/csh로 변경
+- usermod –groups user1 cookuser1  => cookuser1 사용자의 보조 그룹에 user1그룹추가
+
+ [userdel]
+사용자를 삭제하는 명령어
+- userdel cookuser2  => cookuser2 사용자만 삭제
+- userdel –r cookuser3   => cookuser3 사용자와 홈 디텍토리 삭제
+
+ [chage]
+사용자의 비밀번호를 주기적으로 변경하도록 설정하는 명령어
+- chage –l cookuser1  => cookuser1 사용자에 설정된 내용 확인할때
+- chage –m 2cookuser1  => cookuser1 사용자에 설정된 비밀번호를 사용해야하는 최소 일자 (변경 후 최소 2일은 사용해야함)
+  - chage –M 30 cookuser1  => cookuser1 사용자에 설정된 비밀번호를 사용할 수 있는 최대 일자 (변경 후 최대 30일 사용 가능)
+- chage –E 2025/12/12 cookuser1  => cookuser1 사용자에 설정된 비밀번호 만료일 (2025년 12월12일가지 사용가능)
+- chage –W 10 cookuser1  => cookuser1 사용자에 설정된 비밀번호 만료 전의 경고 (암호 만료일 10일전부터 경고 
+메시지 출력). 지정하지 않으면 기본 값은 7일
+
+ [groups]
+사용자가 소속된 그룹을 보여주는 명령어
+- groups  => 현재 등록된 사용자가 소속된 그룹 출력
+- groups cookuser1  => cookuser1 사용자가 소속된 그룹 출력
+
+
+ [groupadd]
+새로운 그룹을 생성하는 명령어
+- groupadd newgroup1  => newgroup1 그룹 생성
+- groupadd –gid 2222 newgroup2  => newgroup2 그룹을 생성하고 그룹id를 2222로 지정
+groupmod
+그룹의 속성을 변경하는 명령어
+- groupmod –new-name mygroup1 newgroup1  => newgroup1 그룹의 이름을 mygroup1로 변경
+
+ [groupdel]
+그룹을 삭제하는 명령어
+- groupdel new group2  => newgroup2 그룹 삭제 (newgroup2그룹을 주 그룹으로 지정한 사용자가 없어야 된다)
+
+ [gpasswd]
+그룹의 비밀번호를 설정하거나 그룹 관리를 수행하는 명령어
+- gpasswd mygroup1  => mygroup1 그룹 비밀번호 설정
+- gpasswd –A cookuser1 mygroup1  =>  cookuser1 사용자를 mygroup1 그룹 관리자로 지정
+- gpasswd –a cookuser4 mygroup1  => cookuser4 사용자를 mygroup1그룹에 추가
+- gpasswd –d cookuser4 mygroup1  => cookuser4 사용자를 mygroup1 그룹에서 제거
+
+
+
+
+
+
+
+
+
+

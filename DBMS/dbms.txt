@@ -1,0 +1,28 @@
+-mysql 설치 순서-
+net framework4.5 다운
+visual c++ redistributable package 2019 설치
+mysql installer 다운
+
+heidsql = 데이터베이스 도구(DBMS를 GUI환경에서 사용)
+mysql connector = 자바랑 mysql연동에 필요한 파일
+
+
+
+
+
+java
+dbms
+java+dbms -순수 백엔드
+html+css, js, jquery
+jsp
+jsp+dbms		-쇼핑몰,게시판
+spring
+spring + mybatis
+프로젝트
+국비수업 
+git linux, 정처기
+
+클라우드 주소
+http://naver.me/5VAtOLHx	암호 =0422
+까페주소
+http://cafe.naver.com/phbprograming

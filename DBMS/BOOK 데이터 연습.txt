@@ -1,0 +1,75 @@
+create database book_practice;
+use book_practice;
+
+create table book(
+code_num int primary key,
+title varchar(50),
+author varchar(30),
+publisher varchar(30),
+book_date date,
+price int
+);
+
+insert into book
+values(1234,'물고기는 존재하지 않는다','룰루 밀러','곰출판','2021-12-01',15300);
+
+insert into book
+values(2234,'나의 봄날인 너에게','여수언니','놀','2023-04-01',15120);
+
+insert into book
+values(3234,'당신은 결국 무엇이든 해내는 사람','김상현','필름','2022-04-01',13500);
+
+insert into book
+values(4234,'이지성의 1만 킬로미터','이지성','차이정원','2023-04-01',16200);
+
+insert into book
+values(5234,'우리에게는 온기가 있기에','연그림','놀','2023-04-01',15300);
+
+insert into book
+values(6234,'The One Thing','Gary Keller','Ltd','2014-04-01',12870);
+
+insert into book
+values(7234,'The Psychology of Money','모건 하우절','Publishing','2020-09-01',25960);
+
+insert into book
+values(8234,' Valuation','Tim McKinsey','Wiley','2020-08-01',58000);
+
+insert into book
+values(9234,'John Neff on Investing','John Neff','Wiley','1999-10-01',69180);
+
+insert into book
+values(10234,'The Intelligent Investor','벤저민 그레이엄','Harper Business','2003-07-01',23590);
+
+-----------------------------------------------------------------------------------------
+
+create table Fild(
+fild_name int(20),
+foreign key(fild_name) references book(code_num),
+country varchar(30)
+);
+
+insert into Fild
+values(1234,'국내도서');
+insert into Fild
+values(2234,'국내도서');
+insert into Fild
+values(3234,'국내도서');
+insert into Fild
+values(4234,'국내도서');
+insert into Fild
+values(5234,'국내도서');
+insert into Fild
+values(6234,'외국도서');
+insert into Fild
+values(7234,'외국도서');
+insert into Fild
+values(8234,'외국도서');
+insert into Fild
+values(9234,'외국도서');
+insert into Fild
+values(10234,'외국도서');
+
+select book.title,book.author,book.publisher,book.book_date,book.price,Fild.country
+from book,Fild
+where book.code_num = Fild.fild_name;
+

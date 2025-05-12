@@ -1,0 +1,53 @@
+VLAN(Virtual LAN) : 가상통신망, 물리적LAN통신망을 여러 가상통신망으로 분할하는 기술
+		  브로드캐스트 영역 분할 기술
+
+장점 : 보안에 강점
+
+
+
+서브네팅
+- 서브네팅 -> 네트워크IP 분할 -> 브로드캐스트IP 분할
+서브네팅을 했다고 브로드캐스트영역이 분할된건X
+
+Access Mode : 단일 VLAN 적용, Sw-PC 간 연결
+Trunk Mode : 여러 VLAN 전달, Sw-Sw, Sw-Router 간 연결
+
+
+
+
+VLAN 명령어 순서(Access Mode)
+
+enable
+config ter
+vlan 10
+exit
+vlan 20
+exit
+
+inter f0/1  (같은 영역으로 묶을 포트번호)
+switchport mode access ( sw mo ac)
+switchport access vlan 10 ( sw ac vlan 10)
+inter f0/2  (같은 영역으로 묶을 포트번호)
+switchport mode access
+switchport access vlan 10
+inter f0/5  (같은 영역으로 묶을 포트번호)
+switchport mode access
+switchport access vlan 10
+
+
+inter f0/3  (같은 영역으로 묶을 포트번호)
+switchport mode access
+switchport access vlan 20
+inter f0/4  (같은 영역으로 묶을 포트번호)
+switchport mode access
+switchport access vlan 20
+
+do show vlan
+
+스위치 명령어 순서(Trunk Mode)
+enable
+config ter
+int f?/?
+switchport mode trunk
+
+show int trunk

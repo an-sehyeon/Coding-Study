@@ -1,0 +1,126 @@
+ACL (Access Control List)
+        접근    제어	   목록
+-스위치,라우터 방화벽과 같은 네트워크 장비에서 구성
+-패킷필터링 목적
+-다른 네트워크 기술의 옵션으로 사용
+
+문법 : access-list [번호] [제어정보] [조건]
+
+ACL	-숫자형 1)Standard ACL : access-list [1-99] [permit/deny] [출발지IP]		(규칙목록 생성)
+
+		명령어 형태					(규칙목록 interface에 적용)
+		inter f?/?
+		ip access-group [1-99] in/out
+		
+		단일Host access-list
+
+		-규칙목록 만들기
+		access-list 10 deny host 192.168.10.1
+		access-list 10 permit any
+
+		-규칙목록 적용
+		inter f1/0
+		ip access-group 10 out
+
+		-acl 삭제
+		config#)no access-list 10
+
+		-그룹의 우선순위가 있다.
+		목록 순서가 중요
+
+		-숫자형은 중간의 항목을 삭제불가능
+		
+(문제 1) 192.168.10.2 ,192.168.10.3 ,192.168.20.2 주소는 차단하고 나머지는 통신이 가능하게 하라
+en
+config ter
+access-list 10 deny host 192.168.10.2
+access-list 10 deny host 192.168.10.3
+access-list 10 deny host 192.168.20.2
+access-list 10 permit any
+inter f1/0
+ip access-group 10 out
+
+(문제 2) 192.168.10.0 네트워크 주소를 전부 차단하고 나머지는 통신이 가능하게 하라
+en
+config ter
+access-list 10 deny 192.168.10.0 0.0.0.255 (차단할 네트워크ip 와일드카드마스크)
+access-list 10 permit any
+inter f1/0
+ip access-group 10 out
+
+(문제 3) 192.168.10.0/24 은 1~31까지만 허용,  192.168.20.0/24 은 짝수host만 허용, 나머지는 거부
+en
+config ter
+access-list 10 permit 192.168.10.1 0.0.0.31
+access-list 10 deny any
+inter f1/0
+access-group 10 out
+
+config ter
+access-list 10 permit 192.168.20.6 0.0.0.254
+inter f1/0
+ip access-group 10 out
+
+
+
+
+
+
+
+
+
+
+
+	          2)Extended ACL : access-list [100-199] [permit/deny] [프로토콜] [출IP] [출port] [목IP] [목port]
+			[프로토콜]=(tcp(연결제어,신뢰도), udp(연결제어X, 전송), icmp...)
+	
+(문제1) PC0가 DNS서비스만 거부, 나머지 PC는 허용	
+	
+en
+config ter
+access-list 100(번호) deny udp host 192.168.10.1 host 172.16.0.1 eq 53		
+access-list 100(번호) permit ip any any
+inter f0/0
+access-group 100 out 
+
+(문제2) PC1가 HTTP 서비스만 거부, 나머지는 허용
+
+access-list 100 deny tcp host 192.168.10.2 host 172.16.0.2 eq 80
+access-list 100 permit ip any any
+inter f0/0
+ip access-group 100 out
+
+
+( 문제3) 모든 클라이언트는 모든 서버 핑X, PC0 = DNS x, PC1 = WEB x, PC2 = FTPx
+access-list 100 deny icmp 192.168.10.0.0 0.0.0.255 172.16.0.0 0.0.255.255 echo
+access-list 100 deny udp host 192.168.10.1 host 172.16.0.1 eq 53
+access-list 100 deny udp host 192.168.10.2 host 172.16.0.2 eq 80
+access-list 100 deny udp host 192.168.10.3 host 172.16.0.3 eq 21
+access-list 100 permit ip any any
+inter f0/0
+ip access-group 100 out
+
+
+----------------------------------------------------------------------------------------------
+
+
+	-문자형 
+	(명령어 형태)
+	en
+	config ter
+	ip access-list standard [name]
+	permit host 192.168.10.1
+	permit host 192.168.10.2
+	permit host 192.168.10.3
+
+(문제 4) host 192.168.10.3은 허용, 192.168.20.0/24는 거부, 나머지는 허용
+en
+config ter
+permit host 192.168.10.3
+deny 192.168.20.0 0.0.0.255
+permit any
+inter f1/0
+ip access-group STDACL [ list name ] out
+
+
+

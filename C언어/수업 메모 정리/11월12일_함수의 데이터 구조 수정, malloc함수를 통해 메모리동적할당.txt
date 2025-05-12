@@ -1,0 +1,346 @@
+
+ [ 함수의 데이터 구조 수정 ]
+
+ - 함수에 데이터 구조의 포인터를 전달하여 해당 데이터를 변경하는 작업을 수행할 때 사용
+
+
+ #include <stdio.h>
+ void reverseArray(int* arr, int size) {
+	int start = 0;
+	int end = size - 1;
+
+	while (start < end) {
+		int temp = arr[start];	
+		arr[start] = arr[end];	
+		arr[end] = temp;
+		start++;
+		end--;
+	}
+ }
+
+ int main(void) {
+	int array[] = { 1, 2, 3, 4, 5 };
+	int size = sizeof(array) / sizeof(array[0]);	// 배열의 총 크기 / 한공간의 크기
+
+	printf("Original Array : ");
+	for (int i = 0; i < size; i++) {
+		printf("%d", array[i]);
+	}
+	printf("\n");
+	reverseArray(array, size);
+
+	printf("Reversed Array : ");
+	for (int i = 0; i < size; i++) {
+		printf("%d ", array[i]);
+	}
+	printf("\n");
+	return 0;
+ }
+
+
+======================================================================
+
+ [ 이차원 배열 ]
+
+ - 이차원 배열 또는 행렬을 표현할 때 더블 포인터 사용
+
+
+
+ #include<stdio.h>
+ #include<stdlib.h>
+  int main(void) {
+
+	int rows = 3;
+	int cols = 4;
+
+	int** twoArray = (int**)malloc(rows * sizeof(int*));		// 각 행에 대한 메모리 할당 ==> 더블포인터로 받고있음.
+	for (int i = 0; i < rows; i++) {
+		twoArray[i] = (int*)malloc(cols * sizeof(int));		// 각 열에 대한 메모리 할당
+	}															// 각 행들은 배열이기에 int*로 받을 수 있음.
+
+	// 할당된 이차원 배열에 값 설정
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			twoArray[i][j] = (i * cols + j) + 1;
+		}
+	}
+
+	// 이차원 배열 출력
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			printf("%d  ", twoArray[i][j]);
+		}
+		printf("\n");
+	}
+
+	// 메모리 해제
+	for (int i = 0; i < rows; i++) {
+		free(twoArray[i]);					// 각 행에 대한 동적 메모리 할당 해제
+	}
+	free(twoArray);						// 전체 배열에 대한 동적 메모리 할당 삭제
+	
+
+	return 0;
+ }
+
+======================================================================
+
+ [ 문제 01 ]
+
+ - 더블 포인터를 통해 배열의 각 요소를 역순으로 출력하는 프로그램을 작성하시오
+ 
+ - 1. 배열을 하나 선언, 크기 : 5, int형 배열
+ - 2. 배열의 주소를 받는 포인터 선언 초기화
+ - 3. 싱글 포인터를 가리키는 더블 포인터
+ - 4. for문 활용 ==> 인덱스에 접근
+ - 5. 마지막 인덱스부터 첫번째 인덱스까지 거슬러서 출력
+
+ #include <stdio.h>
+ int main(void) {
+	int number[] = { 1, 2, 3, 4, 5 };
+	int* ptr = number;
+	int** dptr = &ptr;
+
+	for (int i = 4; i >= 0; i--) {
+		printf("%d ", *(*dptr + i));
+	}
+	
+	return 0;
+ }
+
+
+
+======================================================================
+
+ [ 메모리 동적 할당 ]
+
+ - 이는 사용자의 필요에 따라 메모리를 동적으로 할당할 수 있는
+ - 힙영역(Heap)에서 메모리를 효율적으로 관리 및 사용하기 위한 것.
+ - 원하는 크기만큼, 혹은 필요한 크기만큼 메모리 할당O
+
+ - 이는 프로그램의 런타임에 의해서 결정됨. 즉 실행 중에 메모리를 할당 및 해제
+ - 컴파일 타임에 의해서 정해지는 정적 메모리 할당과 대조됨.
+
+
+	## 런타임이란 ##
+ - 프로그램이 실행 중일 때의 동작을 나타냄. 프로그램이 컴파일되어 실행 파일로 만들어진 후
+ - 실제로 사용자 또는 시스템에 의해 실행되면 런타임이 시작됨.
+
+	### #include <stdlib.h> ###
+ - c와 c++프로그래밍에서 사용되는 표준 라이브러리 헤더 파일 중 하나
+ - 메모리 동적 할당과 관련된 함수들 + 다양한 유틸리티 함수들이 선언되어 있음.
+
+
+======================================================================
+
+ [ 동적 메모리 할당의 필요성 ]
+
+ - 1-1. 유연성 : 런타임 시 필요한 만큼의 메모리 동적 할당 0 ==> 대용량 데이터 처리 0
+
+ - 1-2. 동적 자료 구조 생성 : 동적 메모리 할당을 통해 동적 자료 구조 (연결 리스트, 트리 등) 을 생성 가능
+ 
+ - 1-3 메모리 관리 : 정적 할당보다 메모리를 더 효과적으로 관리0
+
+
+======================================================================
+
+ [ 동적 메모리 할당 함수 ]
+ 
+ - 대표적으로 malloc(), calloc(), realloc(), free() 등의 함수 있음.
+
+ - malloc() 함수 : 동적 메모리 할당을 힙에 수행하고 그 메모리의 시작 주소를 반환하는 함수
+ 		할당하고자 하는 바이트 수(크기)를 인자로 받음. ( 단 초기화 X )
+	[ int* ptr = (int*)malloc(10 * sizeof(int)); ]   = 10개의 int크기만큼 메모리를 할당	
+
+ - calloc() 함수 : 메모리를 할당하면서 0으로 초기화
+	[ int* ptr = (int*)calloc(10, sizeof(int)): ]   = 10개의 int크기만큼 메모리를 할당하고 0으로 초기화
+
+ - realloc() 함수 	기본 형태 : void* realloc(void* ptr, size_t size);
+		예시 : int* ptr = (int*)malloc(3 * sizeof(int));
+		        ptr = (int*)realloc(ptr, 5 * sizeof(int));
+ - 이미 할당된 메모리를 다른 크기로 변경 ( 조절 ==> 확장, 축소)
+ - 만약에 바꾸려는 크기만큼 연속된 메모리를 할당할 수 없을 경우 새로운 영역을 할당 후
+ - 기존 요소들을 복사하여 새로운 메모리 주소 반환
+ - 즉, 확장(변경)된 메모리 블록을 가리키는 포인터가 이전 메모리 블록의 주소값과 일치한다고 말할 수 없음.
+		[ int* resized_ptr = (int*)realloc(ptr, 20 * sizeof(int)); ]   = ptr이 가리키는 메모리를 20개의 int크기로 확장
+		
+ - free() 함수 : 동적으로 할당된 메모리를 해제함. 미사용시 메모리 누수 발생
+		힙에 할당된 메모리 블록을 운영체제에 반환 --> 메모리 누수를 방지
+	[ free(ptr); ]   = ptr이 가리키는 메모리 해제
+ 
+
+
+======================================================================
+
+ [ 동적 메모리 할당과 정적 메모리 할당의 차이 ]
+
+	## 정적 메모리 할당 예제 ##
+
+ #include <stdio.h>
+ int main(){
+	int staticArray[5];		// 정적 배열 선언
+ 	
+	// 값을 입력
+	for(int i = 0; i < 5; i++){
+	 	staticArray[i] = i * 10;
+	}
+
+	// 값 출력
+	printf("정적 배열에 저장된 값 : \n");
+	for(int i = 0; i < 5; i++){
+		printf("%d ", staticArray[i]);
+	}
+	printf("\n");
+	return 0;
+	}
+
+
+
+	  ## 동적 메모리 할당 예제 ##
+
+ #include <stdio.h>
+ #include <stdlib.h>
+ int main() {
+	
+	int* dynamicArray = (int*)malloc(5 * sizeof(int));	// 동적 배열 동적 할당
+	
+	if(dynamicArray == NULL){				// 메모리 할당에 실패했을 경우 출력할 코드
+	printf("메모리 할당 실패\n");
+	return 1;
+	}
+
+	// 값 입력
+ 	for(int i = 0; i < 5; i++){
+	dynamicArray[i] = i * 10;
+	}
+
+	// 값 출력
+	for(int i = 0; i < 5; i++){
+	printf("%d",dynamicArray[i]);
+	}
+	printf("\n");
+
+	free(dynamicArray); 				// 할당된 메모리 해제
+	return 0;
+	}
+
+
+
+ - 동적 할당은 컴파일 타임에 수행 x
+ - 실행 중에 동적 배열의 크기를 조정할 수 있음.
+ - realloc()함수 사용하면 메모리의 크기 재할당 가능
+
+
+======================================================================
+
+ [ 문제 ]
+
+ - 사용자로부터 정수를 입력받아 해당 크기의 정수 배열을 동적으로 할당하고, 사용자로부터 배열에
+ - 값을 입력받아 출력하는 프로그램 작성
+
+ - 이것은 초기 단계에서 동적 할당과 사용자 입력을 처리하는 방법을 익히기에 좋은 문제임
+
+ - 코드 구성
+ - 1. 사용자로부터 배열 크기를 입력받습니다.
+ - 2. 입력된 크기에 맞게 메모리를 동적으로 할당합니다.
+ - 3. 배열에 값을 입력받습니다.
+ - 4. 배열에 입력된 값을 출력합니다.
+
+
+ #include <stdio.h>
+ #include <stdlib.h>
+  int main(void) {
+
+	int size = 0;
+
+	// 사용자로부터 배열 크기 입력
+	printf("배열 크기를 입력하세요>>>\n");
+	scanf_s("%d", &size);
+
+	// 입력된 크기에 맞게 메모리를 동적으로 할당
+	int* arr = (int*)malloc(size * sizeof(int));
+
+	if (arr == NULL) {
+		printf("동적 할당이 실패했습니다.>>>\n");
+		return 1;				// 프로그램 종료 코드
+	}
+
+	// 배열에 값을 입력
+	printf("%d개의 정수를 입력하세요>>>\n", size);
+	for (int i = 0; i < size; i++) {
+		scanf_s("%d", &arr[i]);
+	}
+	
+
+	// 배열에 입력된 값 출력
+	printf("배열의 값 : ");
+	for (int i = 0; i < size; i++) {
+		printf("%d  ", arr[i]);
+	}
+	printf("\n");
+
+	free(arr);
+
+
+	return 0;
+ }
+
+
+
+======================================================================
+
+ [ 문제 ]
+
+ - 배열의 크기를 동적으로 할당하여 합계와 평균을 계산하는 프로그램 작성
+
+ - 여기에는 사용자로부터 배열의 크기를 입력받고 해당 크기에 맞게 메모리를 할당하는 것과,
+ - 그 배열의 값들을 입력받는 과정이 포함되어 있음
+ - 마지막으로 배열의 합계와 평균을 출력
+ 
+
+
+ #include<stdio.h>
+ #include<stdlib.h>
+  int main(void) {
+
+	// 사용자로부터 배열의 크기를 입력받고 해당 크기에 맞게 메모리를 할당
+	int size = 0;
+	printf("배열의 크기를 입력하세요>>>\n");
+	scanf_s("%d", &size);
+	int* arr = (int*)malloc(size * sizeof(int));
+
+	if (arr == NULL) {
+		printf("동적메모리할당에 실패했습니다.>>>\n");
+		return 1;
+	}
+
+	//-그 배열의 값들을 입력받고 배열의 값 출력
+	printf("배열의 값들을 %d크기만큼 입력하세요>>>\n",size);
+	for (int i = 0; i < size; i++) {
+		scanf_s("%d,",&arr[i]);
+	}
+
+	printf("현재 배열의 값 : ");
+	for (int i = 0; i < size; i++) {
+		printf("%d  ", arr[i]);
+	}
+	printf("\n");
+
+	//- 마지막으로 배열의 합계와 평균을 출력
+	int sum = 0;
+	for (int i = 0; i < size; i++) {
+		sum += arr[i];
+	}
+	float ave = (float)sum / size;
+
+	printf("배열의 합계 : %d\n", sum);
+	printf("배열의 평군 : %.3f\n", ave);
+
+	free(arr);
+
+
+	return 0;
+ }
+
+
+

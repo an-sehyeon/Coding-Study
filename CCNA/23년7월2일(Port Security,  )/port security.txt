@@ -1,0 +1,67 @@
+Port Security
+-포트보안은 허락되지 않은 사용자가 몰래 스위치에 어떤 장치나 다른 호스트를 연결하는 것을 막는 방법
+-port로의 접근하는 MAC주소의 수를 제한하여 MAC flooding attack을 차단
+
+
+
+{port security 동적(dynamic) 보안 명령어} = 주소가 고정 X, 접근우선순위에 따라 학습, sw설정내용저장시 주소저장x
+inter fa0/1
+switchport mode access
+switchport port-security
+switchport port-security maximum 1
+switchport port-security vioation (shutdown | protect | restrict)
+
+--------------------------------------------------------------------
+
+{port security 정적(static) 보안 명령어} = 주소가 고정o , sw설정내용저장시 주소 저장o
+inter f0/1
+sw mo ac
+sw po
+sw po mac-address [mac주소]
+sw po max 1
+sw po vio protect
+copy run st
+--------------------------------------------------------------------
+
+{port security sticky 보안 명령어} = dynamic + static, 주소가 고정x, 접근우선순위에 따라 학습, sw설정 내용저장시 주소저장o
+inter f0/1
+sw mo ac
+sw po
+sw po max 1
+sw po mac-address sticky
+sw po violation protect
+ex
+
+--------------------------------------------------------------------
+
+running-config : 현재 설정된 내용 저장
+startup-config : 미리 저장된 설정 내용
+저장하기 : copy ruunig- config startup-config
+	 copy run st
+
+[확인] = show port-security
+[mac테이블 삭제] = clear mac-address table
+[설정된 내용 확인]show running-config 
+[재부팅]en - reload
+
+
+[위반 정책]
+shutdown : 보안 침해시 해당 포트를 셧다운 시킨다
+
+protect : 보안 침해시 해당 장비의 접속만 차단하고, 접속이 허용된 장비들은 계속 포트를 사용 가능하게 한다
+
+restrict : protect옵션과 같으나 추가적인 Logging Message를 발생시키거나 보안 침해 카운터를 증가 시킨다
+
+
+
+
+
+
+
+
+
+
+
+
+
+

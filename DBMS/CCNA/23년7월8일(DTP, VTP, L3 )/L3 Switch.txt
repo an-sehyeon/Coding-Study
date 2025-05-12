@@ -1,0 +1,58 @@
+L3 Switch(라우팅처리,  L2관련 기능 사용) = LAN구간에서 사용되는 보급형 라우터
+
+L4 Switch(로드밸런서)
+
+Router ( 외부트래픽관리, 내부 포워딩, 라우팅, 보안처리 ...)
+
+
+L3명령어
+en
+config ter
+vlan 10
+ex
+vlan 20
+ex
+int vlan 10
+ip add 192.168.10.254 255.255.255.0
+no sh
+ex
+int vlan 20
+ip add 192.168.20.254 255.255.255.0 
+no sh
+ex
+ip routing = 라우팅 기능 활성화
+
+
+int range f0/2-4
+channel-protocol lacp
+channel -gorup 1 mode active
+ex
+int po 1
+sw tr en dot
+sw mo tr
+
+L3스위치에 ip 추가시 no switchport명령어 입력 후 추가
+en
+config ter
+int f0/5
+no sw
+ip add 10.0.0.2 255.0.0.0
+no sh 
+ex
+
+라우터명령어
+router rip
+ver 2
+net 192.168.10.0
+net 192.168.20.0
+net 10.0.0.0
+no au
+
+rourer rip
+ver 2
+
+
+
+
+
+

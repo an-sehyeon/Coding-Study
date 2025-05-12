@@ -1,0 +1,450 @@
+UNIQUE
+-중복방지
+-널값은 허용
+
+use practice2;
+
+create table uni_table(
+id varchar(20) unique,
+name varchar(20)
+);
+
+show columns in uni_table;
+
+insert into uni_table
+values( ' CE2009038018', '김철수');
+
+insert into uni_table
+values( ' CE2009038018', '옥희종');
+-오류
+insert into uni_table
+values( ' null', '옥희종');
+--------------------------------------------------------------------------
+
+default - 기본값 설정
+
+create table default_test(
+id int,
+item varchar(20),
+amount int default 1
+);
+
+insert into default_test values(111, '포도', 7);
+
+insert into default_test values(222, '사과', 3);
+
+insert into default_test(id,item) values(333, '오렌지');
+-amount(수량)을 따로 설정하지 않으면 디폴트값 1
+
+select * from default_test;
+
+--------------------------------------------------------------------------
+
+create table default_test2(
+id varchar(10),
+book_title varchar(20),
+store_place varchar(20) default '대구중앙도서관'
+);
+
+show columns in default_test2;
+
+insert into default_test2
+values('가-123','어쩌다 한국인', '두류도서관');
+
+insert into default_test2
+values('나-123','코스모스', '2.28도서관');
+
+insert into default_test2
+values('다-123','분석 심리학');
+-오류
+
+insert into default_test2(id,book_title)
+values('다-123','분석 심리학');
+-도서관 지정안하면 기본 대구중앙도서관으로 들어감
+
+select * from default_test2;
+
+--------------------------------------------------------------------------
+
+chech 제약조건
+
+create table check_table(
+    item varchar(10),
+    amount int check(amount >=1 and amount<=10)
+    );
+
+-amount에 check제약조건 설정
+- 수량 1이상 10이하만 가능
+
+insert into check_table
+values('꼬부기의 소보루',5);
+
+insert into check_table
+values('로켓단의 롤케이크', 20);
+-check constraint 'check_table_chk_1' is violated = 오류
+- 체크 제약조건 check_table_chk_1을 위반했다.
+
+select * from information_schema.table_constraints
+where table_name = 'check_table';
+
+--------------------------------------------------------------------------
+
+create table check_table2(
+    name varchar(10),
+    gender varchar(1) check (gender in ('M', 'F'))
+    );
+-in : ~안에 있나?, or 과 역할이 같다.
+-성별 M또는 F만 허용
+
+insert into check_table2 values('박민석','M');
+insert into check_table2 values('이지은','F');
+insert into check_table2 values('유재석','K');
+-오류 = K는 못넣는다.
+-check constraint 'check_table_chk_1' is violated
+-체크 제약조건 'check_table_chk_1'이 위반되었다.
+
+--------------------------------------------------------------------------
+
+create table check_table3(
+	name varchar(10),
+	birth_date date,
+	constraint bd_check CHECK(birth_date between
+	'1990-04-01' and '2010-12-31')
+);
+
+insert into check_table3 values('박민석','1995-05-01');
+
+insert into check_table3 values('이지은','1994-07-23');
+
+insert into check_table3 values('유재석','1978-02-21');
+-오류
+ check constraint 'bd_check' is violated
+ 체크 제약조건 'bd_check'를 위반했다.
+-bd_check제약조건 이름은 내가 지은거다.
+
+select * from information_schema.table_constraints
+where table_name = 'check_table3';
+
+--------------------------------------------------------------------------
+
+조인
+-조인은 여러개의 테이블을 합쳐서 출력
+-한 테이블에 칼럼 30개씩
+-회원정보, 계약정보...
+
+student테이블, patient테이블 만들고 데이터 넣고 조인으로 합쳐서 결과를 본다.
+-왼쪽조인, 오른쪽 조인, 내부조인
+
+create table sudent(
+name varchar(10),
+age int,
+height double
+);
+
+insert into student(name,age,height)
+values('박호범',20,175.3);
+
+insert into student(name,age,height)
+values('송중기',21,178.6);
+
+insert into student(name,age,height)
+values('정채연',21,164.2);
+
+select * from student;
+
+--------------------------------------------------------------------------
+
+create table patient(
+name varchar(10),
+age int,
+address varchar(50)
+);
+
+insert into patient
+values('박호범',20,'대구광역시 감삼동');
+
+insert into patient
+values('송중기',21,'서울특별시 동작구');
+
+insert into patient
+values('이강인',18,'대전광역시 둔산동');
+
+insert into patient
+values('박지성',25,'전라남도 고흥군');
+
+select * from patient;
+
+--------------------------------------------------------------------------
+
+왼쪽조인
+select student ~~~~ from
+왼쪽테이블 left outer join 오른쪽 테이블
+on student.name=patient.name;
+-name칼럼 기준으로 왼쪽 조인(왼쪽 외부조인)
+
+select student.name,student.age,patient.address 
+from student left outer join patient 
+on student.name=patient.name;
+
+- 오른쪽 조인 (오른쪽 외부조인)
+select student.name,student.age,patient.address 
+from student right outer join patient 
+on student.name=patient.name;
+--------------------------------------------------------------------------
+
+이너조인
+-이너조인 or where조건절로 이너조인 효과 똑같이
+
+select student.name, student.age, patient.address
+from student,patient
+where student.name = patient.name;
+=where조건절로 이너조인 효과 똑같이
+
+select student.name,student.age,patient.address 
+from student inner join patient
+where student.name=patient.name;
+=이너조인
+--------------------------------------------------------------------------
+
+조인 연습문제 1
+emp - employee, dept - department
+사원테이블, 부서테이블 조인
+사원번호 기준으로 조인
+
+(emp 사원 테이블)
+create table emp(
+empno int,
+ename varchar(30),
+job varchar(50),
+deptno int
+);
+
+insert into emp
+values(7839,'KING','PRESIDENT',90);
+
+insert into emp
+values(7566,'JONES','MANAGER',20);
+
+insert into emp
+values(7788,'SCOTT','ANALYST',10);
+
+insert into emp
+values(7654,'MARTIN','SALESMAN',30);
+
+insert into emp(empno,ename,job)
+values(7900,'JAMES','CLERK');
+
+select * from emp;
+
+(dept 부서 테이블)
+create table dept(
+deptno int,
+dname varchar(50),
+loc varchar(50)
+);
+
+insert into dept
+    values(10,'ACCOUNTING','NEW YORK');
+
+insert into dept
+   values(20,'RESEARCH','DALLAS');
+
+insert into dept
+   values(30,'SALES','CHICAGO');
+
+insert into dept
+   values(40,'OPERATIONS','BOSTON');
+
+select * from dept;
+
+(emp테이블 dept테이블 조인)
+
+select emp.ename,dept.dname
+from emp,dept
+where emp.deptno=dept.deptno;
+(사원 이름과 부서명 출력)
+
+select emp.empno,emp.ename,emp.job,dept.dname,dept.loc
+from emp left outer join dept
+on emp.deptno = dept.deptno;
+(사원번호, 이름, 직책, 부서명, 위치 출력)
+
+--------------------------------------------------------------------
+연습문제2
+
+약품 테이블 칼럼 항목
+약이름(drug_name)
+의존성(dependency)
+금단성(withdrawal)
+내성(tolerance)
+강화성(enhanced)
+독성(toxicity)
+
+약품 테이블 생성
+create table drug(
+    name varchar(20),
+    dependency int,
+    withdrawal int,
+    tolerance int,
+    enganced int,
+    toxicity int
+    );
+
+insert into drug
+values('니코틴',6,4,5,4,3);
+insert into drug
+values('헤로인',5,5,6,5,6);
+insert into drug
+values('코카인',4,3,3,4,3);
+insert into drug
+values('알코올',4,6,4,4,6);
+insert into drug
+values('카페인',2,2,2,1,1);
+insert into drug
+values('대마초',1,1,1,2,3);
+
+select * from drug;
+select name,toxicity from drug;
+select name,dependency from drug;
+select * from drug where name='니코틴';
+select * from drug where name='알코올';
+select * from drug where name='대마초';
+select * from drug order by dependency desc;                                      
+select * from drug order by dependency asc;  
+select * from drug order by toxicity desc;
+select * from drug order by toxicity asc;
+
+--------------------------------------------------------------------
+
+테이블 3개 만들고
+학생 성적 정보 출력
+학번, 이름, 과목이름 , 과목 번호 ,학점 등등 조인
+
+(학생정보 테이블)
+creat table student(
+id int primary key,
+name varchar(10)
+);
+
+insert into student
+values (11002,'이홍근');
+
+insert into student
+values (24036,'김순미');
+
+select * from student;
+
+(수강 테이블)
+creat table lecture(
+lecture_id int,
+foreign key(lecture_id) references student(id),
+subject_no_fk varchar(40),
+foreign key(subject_no_fk) references subject(subject_no),
+grade varchar(20)
+);
+
+insert into lecture
+values(11002,'cs310','A0');
+
+insert into lecture
+values(11002,'cs313','B+');
+
+insert into lecture
+values(24036,'cs345','B0');
+
+insert into lecture
+values(24036,'cs310','A+');
+
+select * from lecture;
+
+(과목 테이블)
+create table subject(
+subject_no varchar(40) primary key,
+subject_name varchar(30)
+);
+
+insert into subject
+values('cs310','데이터베이스');
+
+insert into subject
+values('cs313','운영체제');
+
+
+insert into subject
+values('cs345','자료구조');
+
+select * from subject;
+
+select student.id,student.name,lecture.subject_no_fk,lecture.grade
+from student, lecture
+where student.id = lecture.lecture_id;
+(student테이블의 id,name과 lecture테이블의 subject_no_fk,grade 조인)
+
+select lecture.grade,subject.subject_name
+from lecture,subject
+where lecture.subject_no_fk = subject.subject_no;
+(lecture테이블의 grade와 subject테이블의 subject_name 조인)
+
+select student.id,student.name,subject.subject_name,lecture.grade
+from student, subject, lecture
+where student.id = lecture.lecture_id and lecture.subject_no_fk=subject.subject_no;
+
+(student테이블의 id,name
+ lecture테이블의 grade
+ subject테이블의 subject_name
+ 조인 후 출력)
+-------------------------------------------------------------------------------------
+
+ 연습문제
+create database kcar_db;
+
+use kcar_db;
+
+create table kcar(
+model varchar(20),
+price int,
+km int,
+produce_date date,
+enter_date date
+);
+
+insert into kcar
+values('아반떼',1300,35062,'2021-02-03','2022-02-21');
+
+insert into kcar
+values('소나타',1600,24535,'2021-03-13','2022-03-21');
+
+insert into kcar
+values('모닝',500,65042,'2021-04-22','2022-04-21');
+
+insert into kcar
+values('벤츠',3500,25513,'2021-05-11','2022-05-21');
+
+insert into kcar
+values('레이',1100,75301,'2021-06-21','2022-06-21');
+
+insert into kcar
+values('쉐보레',1400,45021,'2021-07-22','2022-07-21');
+
+insert into kcar
+values('코나',1500,25020,'2021-08-13','2022-08-21');
+
+insert into kcar
+values('렉스턴',1600,150324,'2022-09-20','2022-09-21');
+
+insert into kcar
+values('아우디',3600,18325,'2022-10-14','2022-10-21');
+
+select * from kcar;
+select * from kcar where model = '소나타';
+select * from kcar where price between '1000' and '2000';
+select * from kcar where km between 30000 and 40000;
+select * from kcar where produce_date like '%2022%' or '%2023%';
+
+
+
+
+
+
+
+

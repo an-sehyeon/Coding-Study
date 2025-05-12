@@ -1,0 +1,76 @@
+Native Lan
+
+-미지원장치로부터 받아들이는 데이터에 작용하는 VLAN ID
+ Trunk Mode에서 적용
+ 801.1q 프로토콜에서만 지원
+ 기본 Native Vlan id = 1
+
+802.1q 프로토콜 : 표준, Native Vlan 지원
+----------------------------------
+
+
+Inter Vlan
+
+
+----------------------------------
+
+
+DHCP (Dynamic Host Configuration Protocol) :  인터넷 연결이 가능하도록 설정
+	동적     PC          설정              프로토콜	(인터넷연결 - TCP/IP) = HOST/SM/GWIP/DNSIP
+
+[Local DHCP]
+en
+config ter
+ip dhcp pool (pool이름)
+net (netip) (subnetmask)
+dns-server (dns ip)
+default-router (gateway IP)
+ex
+ip dhcp excluded-address (hostip)  또는 ip dhcp excluded-address (start ip) (end ip)
+
+[RemoteDHCP]
+Router(config)#ip dhcp pool remote
+Router(dhcp-config)#net 10.0.0.0 255.0.0.0
+Router(dhcp-config)#default-router 10.255.255.254
+Router(dhcp-config)#exit
+
+[ROUTER CLIENT용 POOL]
+Router(config)#ip dhcp pool ToRouter
+Router(dhcp-config)#net 20.0.0.0
+% Incomplete command.
+Router(dhcp-config)#net 20.0.0.0 255.0.0.0
+Router(dhcp-config)#default-router 20.255.255.254
+Router(dhcp-config)#exit
+
+[Remote Relay용 Pool]
+Router(config)#ip dhcp pool REMOTE2
+Router(dhcp-config)#net 200.255.255.0 255.255.255.0
+Router(dhcp-config)#default-router 200.255.255.254
+Router(dhcp-config)#exit
+
+[IP DHCP Client]
+Router(config-if)#ip address dhcp 
+
+
+[DHCP-RelayAgent]
+Router(config)#inter f0/0
+Router(config-if)#ip helper-address 1.1.12.1
+
+Router(config)#inter f0/1
+Router(config-if)#ip help
+Router(config-if)#ip helper-address 1.1.12.1
+
+
+[DHCP범위제한]
+ip dhcp excluded-address = ip 할당범위 지정
+
+
+
+
+
+-------------------------------------
+IPv6 : autoConofig = Stateless Ip 할당(자동으로 IP할당)
+
+
+
+	

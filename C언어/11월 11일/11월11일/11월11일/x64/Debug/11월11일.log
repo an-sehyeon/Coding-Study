@@ -1,0 +1,2 @@
+﻿11월11일_ch.obj : error LNK2005: main이(가) 11월12일_ch.obj에 이미 정의되어 있습니다.
+E:\C언어\11월 11일\11월11일\x64\Debug\11월11일.exe : fatal error LNK1169: 여러 번 정의된 기호가 있습니다.

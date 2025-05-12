@@ -1,0 +1,22 @@
+VLAN(allowed)
+명령어
+
+inter f?/?
+switchport trunk allowed vlan 10 = vlan 10만 허용, 나머지는 거부
+
+inter f?/?
+switchport trunk allowed vlan 10-11,20 = (복수ID) vlan 10-11,20만 허용 나머지는 거부 
+
+inter f?/?
+switchport trunk allowed vlan add 30 = (vlan ID 추가) 
+
+inter f?/?
+switchport trunk allowed vlan remove 30 =  (vlan ID 제거)
+
+inter f?/?
+switchport trunk allowed vlan all = 모든 vlan id 허용
+
+inter f?/?
+switchport trunk allowed vlan except 10 =(예외 id 설정) vlan10을 제외한 나머지 허용  
+
+show int trunk = vlan allowed on trunk 확인

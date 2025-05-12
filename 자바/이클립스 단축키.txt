@@ -1,0 +1,11 @@
+ALT + 방향키 : 현재 커서가 있는 줄의 소스를 아래나 위로 이동
+
+CTRL + D : 커서에 있는 한 줄 모드 지우기
+
+CTRL + SHIFT + F : 필요한 문단 선택 후 문단 자동 정렬
+
+CTRL + SHIFT + C : 지정된 영역 주석 처리
+
+syso + CTRL + SPACEBAR : System.out.print();를 자동 생성
+
+

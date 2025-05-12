@@ -1,0 +1,44 @@
+Ethernet Channel (이더 채널)
+-링크(케이블) 이중화 기술
+
+
+Pagp(Port Aggregation Protocol)
+-Csico 전용 이더채널 프로토콜
+명령어
+
+LACP(Link Aggregation Protocol)
+명령어
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

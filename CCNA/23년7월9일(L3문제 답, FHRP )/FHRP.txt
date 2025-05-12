@@ -1,0 +1,301 @@
+FHRP (First Hop Redundancy Protocol)
+	-사용되는 프로토콜 종류
+HSRP(Hot Standby Router Protocol)
+VRRP(Virtual Router Redundancy Protocol)
+GLBP(Gateway Load Balancing Protocol)
+
+
+GRATITUITOUS ARP
+-IP주소와 MAC주소간의 매핑을 확인하기 위해 사용되는 프로토콜
+
+
+
+---------------------------------------------------------
+
+
+HSRP(Hot Standby Router Protocol) 명령어
+
+<1>
+(Active)
+en
+config ter
+int vlan 1
+ip add 192.168.10.100 255.255.255.0
+no sh
+
+(Standby)
+en
+config ter
+int valn 1
+int vlan 1
+ip add 192.168.10.200 255.255.255.0
+no sh
+
+(Active)
+ex
+int vlan 1
+standby 1 ip 192.168.10.254
+standby 1 priority 105
+standby 1 preempt
+do show standby brief
+
+(Standby)
+ex
+int vlan 1
+standby 1 ip add 192.168.10.254 
+standby 1 preemptl
+do show standby brief
+
+(Active)
+END
+RELOAD
+
+(Standby)
+END
+RELOAD
+
+---------------------------------------------------------
+
+<2>
+(SW0)
+en
+config ter
+int range f0/1-2
+sw mo tr
+ex
+
+(Active)
+en
+config ter
+int vlan 1
+ip add 192.168.10.100 255.255.255.0
+stnadby 1 ip 192.168.10.254
+standby 1 priority 105
+standby 1 preempt
+no sh
+ex
+do show standby brief
+
+(Standby)
+en
+config ter
+int vlan 1
+ip add 192.168.10.200 255.255.255.0
+standby 1 ip 192.168.10.254
+standby 1 proirty 102
+standby 1 preempt
+no sh
+ex
+do show standby brief
+
+(Active)
+ex
+ip routing
+int f0/1
+no sw
+ip add 100.0.0.1 255.0.0.0
+no sh
+
+(Route)
+en
+config ter
+int f0/0
+ip add 100.0.0.2 255.0.0.0
+no sh
+int f0/1
+ip add 200.0.0.2 255.0.0.0
+no sh
+int f1/0
+ip add 172.16.255.254 255.255.0.0
+no sh
+
+
+(Standby)
+ex
+ip routing
+int f0/1
+no sw
+ip add 200.0.0.1 255.0.0.0
+no sh
+
+
+(Active)
+router rip 
+ver 2
+net 192.168.10.0
+net 100.0.0.0
+no au
+
+(Standby)
+router rip
+ver 2
+net 192.168.10.0
+net 200.0.0.0
+no au
+
+(Route)
+router rip 
+ver 2
+net 100.0.0.0
+net 200.0.0.0
+net 172.16.0.0
+no au
+
+(Active)
+ex
+int vlan 1
+standby 1 track f0/1
+do show standby brief
+
+
+---------------------------------------------------------
+
+
+<문제3> HSRP
+
+(Active)
+en 
+config ter
+int vlan 1
+ip add 192.168.10.100 255.255.255.0
+standby 1 ip 192.168.10.254
+standby 1 priority 105
+standby 1 preempt
+no sh
+standby 1 track f0/2
+
+(Standby)
+en
+config ter
+int vlan 1
+ip add 192.168.10.200 255.255.255.0
+standby 1 ip 192.168.10.254
+standby 1 preempt
+no sh
+
+(Route)
+en
+config ter
+int f0/0
+no sh
+
+(Active)
+ex
+ip dhcp pool activepool
+net 192.168.10.0 255.255.255.0
+default-router 192.168.10.254
+dns-server 10.10.10.10
+ex
+ip dhcp excluded-address 192.168.10.1 192.168.10.99
+ip dhcp excluded-address 192.168.10.101 192.168.10.254
+ip dhcp excluded-address 192.168.10.100
+ip dhcp excluded-address 192.168.10.200
+
+
+(Standby)
+
+(SW0)
+en
+config ter
+int f0/1
+sw mo tr
+
+
+---------------------------------------------------------
+
+
+<MHSRP예제>
+(SW0)
+en
+config ter
+vlan 10
+ex
+vlan 20
+ex
+int f0/4
+sw mo ac
+sw ac vlan 10
+int f0/2
+sw mo ac
+sw ac vlan 10
+int f0/1
+sw mo tr
+int f0/3
+sw mo tr
+
+(SW1)
+en
+config ter
+vlan 10
+ex
+vlan 20
+ex
+int f0/2
+sw mo ac
+sw ac vlan 20
+int f0/4
+sw mo ac
+sw ac vlan 20
+int f0/1
+sw mo tr
+
+(MULTI SW0)
+en 
+config ter
+no int vlan 10
+no int vlan 20
+
+(MULTI SW1)
+en 
+config ter
+no int vlan 10
+no int vlan 20
+
+
+(MULTI SW0)
+int vlan 10
+ip add 192.168.10.100 255.255.255.0
+standby 10 ip 192.168.10.254
+standby 10 priority 105
+standby 10 preempt
+ex
+
+
+
+
+(MULTI SW1)
+int vlan 10
+ip add 192.168.10.200 255.255.255.0
+standby 10 ip 192.168.10.254
+standby 10 preempt
+ex
+
+(MULTI SW1)
+int vlan 20
+ip add 192.168.20.200 255.255.255.0
+standby 20 ip 192.168.20.254
+standby 20 priority 105
+standby 20 preempt
+ex
+
+(MULTI SW0)
+ex
+int vlan 20
+ip add 192.168.20.100 255.255.255.0
+standby 20 ip 192.168.20.254
+standby 20 preempt
+no sh
+ex
+
+
+
+
+
+
+
+
+
+
+
+
+

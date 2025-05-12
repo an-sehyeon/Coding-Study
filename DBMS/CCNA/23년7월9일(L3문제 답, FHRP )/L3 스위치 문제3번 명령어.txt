@@ -1,0 +1,101 @@
+4SW
+
+en
+config ter
+vlan 10
+ex
+vlan 20
+ex
+int f0/3
+sw mo ac
+sw ac vlan 10
+inter f0/4
+sw mo ac
+sw ac vlan 20
+int f0/1
+sw mo tr
+
+
+Multi SWh0
+en
+config ter
+vlan 10
+ex
+vlan 20
+ex
+int vlan 10
+ip add 192.168.10.254 255.255.255.0
+no sh 
+ex
+int vlan 20
+ip add 192.168.20.254 255.255.255.0
+no sh 
+ex
+ip routing
+
+
+Multi SWh1
+en
+config ter
+vlan 10
+ex
+vlan 20
+ex
+int f0/3
+sw mo ac
+sw ac valn 20
+int f0/4
+sw mo ac
+sw ac vlan 10
+ex
+int f0/1
+sw mo tr
+int vlan 10
+ip add 192.168.30.254 255.255.255.0
+no sh
+ex
+int vlan 20 
+ip add 192.168.40.254 255.255.255.0
+no sh
+ex
+ip routing
+
+
+
+Multi SWh0
+int f0/2
+no switchport
+ip add 1.1.1.1 255.255.255.0
+no sh
+
+
+
+Multi SWh1
+int f0/1
+no shitchport
+ip add 1.1.1.2 255.255.2550
+no sh
+
+
+
+Multi SWh0
+router rip
+ver 2
+net 192.168.10.0
+net 192.168.20.0
+net 1.1.1.0
+no au
+
+
+
+
+Multi SWh1
+router rip
+ver 2
+net 192.168.30.0
+net 192.168.40.0
+net 1.1.1.0
+no au
+
+
+
